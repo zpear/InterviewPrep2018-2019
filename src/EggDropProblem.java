@@ -16,7 +16,7 @@ public class EggDropProblem {
             table[eggs][floors] = floors;
             return floors;
         }
-        
+
         int minPoss = Integer.MAX_VALUE;
         for (int jump = 1; jump <= floors; jump++) {
             int eggBreaks = findMinDropsHelper(eggs-1, jump-1);
