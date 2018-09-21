@@ -25,9 +25,32 @@ public class OverlappingRegions {
 
     public static boolean[][] visited;
 
-//    public static int getNumOverlappingRegions(int[][] img1, int[][] img2) {
-//
-//    }
+    /**
+     * Assume img1 and img2 are both the same size
+     */
+    public static int getNumOverlappingRegions(int[][] img1, int[][] img2) {
+        visited = new boolean[img1.length][img1.length];
+        boolean[][] visited1 = new boolean[img1.length][img1.length];
+        boolean[][] visited2 = new boolean[img1.length][img1.length];
+        int numOverlapps = 0;
+
+        for (int i = 0; i < visited.length; i++) {
+            for (int j = 0; j < visited[0].length; j++) {
+                if (!visited[i][j]) {
+                    String img1Region = identifyRegion(img1, visited1, i, j, "s");
+                    String img2Region = identifyRegion(img2, visited2, i, j, "s");
+
+                    System.out.println(img1Region);
+                    System.out.println(img2Region);
+                    if (img1Region.equals(img2Region) && !img1Region.equals("") && !img1Region.equals("e")) {
+                        numOverlapps++;
+                    }
+                }
+            }
+        }
+
+        return numOverlapps;
+    }
 
     /**
      * Searches through a region of 1's in the given matrix. Registers each 1 it hits in the visited and specific
@@ -38,7 +61,7 @@ public class OverlappingRegions {
         if (!(checkBounds(img, i, j, specVisited) && img[i][j] == 1)) {
             if (checkBounds(img,i,j, specVisited)) {
                 visited[i][j] = specVisited[i][j] = true;
-                return "e"; // end
+                return ""; // end
             } else {
                 return "";
             }
@@ -48,13 +71,10 @@ public class OverlappingRegions {
 
         // up
         thisCell += identifyRegion(img, specVisited, i-1, j, "u");
-
         // down
         thisCell += identifyRegion(img, specVisited, i+1, j, "d");
-
         // left
         thisCell += identifyRegion(img, specVisited, i, j-1, "l");
-
         // right
         thisCell += identifyRegion(img, specVisited, i, j+1, "r");
 
@@ -68,15 +88,15 @@ public class OverlappingRegions {
 
     public static void main(String[] args) {
         int[][] test1 = {{1,1,1,0},
-                         {1,1,0,0},
-                         {1,0,0,0},
-                         {0,0,0,0}};
+                         {1,1,0,1},
+                         {1,0,0,1},
+                         {0,0,1,0}};
+
         int[][] test2 = {{1,1,1,0},
-                {1,1,0,0},
-                {1,0,0,0},
-                {0,0,0,0}};
-        visited = new boolean[test1.length][test1.length];
-        System.out.println(identifyRegion(test1, new boolean[test1.length][test1.length],0,0,"s"));
-        System.out.println(identifyRegion(test2, new boolean[test1.length][test1.length],0,0,"s"));
+                         {1,1,0,1},
+                         {1,0,0,0},
+                         {0,0,1,0}};
+
+        System.out.println(getNumOverlappingRegions(test1, test2));
     }
 }
